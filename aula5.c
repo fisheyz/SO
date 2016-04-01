@@ -1,4 +1,8 @@
+#include <stdio.h>
+#include <stdlib.h>
 
+
+int MAXLINE = 99999;
 
 int main(){
   int n, fd[2]; pid_t pid; char buf[MAXLINE];
