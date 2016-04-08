@@ -95,13 +95,19 @@ void execute_commands(COMMAND *commlist) {
   if ((pid=fork())<0){
     //fork fail
   }else if (pid == 0){
-    int fd = open("Fich.txt", O_WRONLY|O_APPEND);
-    if (fd<0)
-      printf("ERRO: nao e possivel abrir ficheiro\n"); 
-    if (dup2(fd,STDOUT_FILENO)<0)
-      printf("Error:nao e possivel duplicar o ficheiro\n");
+    if (inputfile != NULL) {
+      int fd = open(inputfile, O_RDONLY);
+      if (fd<0) {
+	perror("myShell"); 
+	exit(1);
+      }
+      if (dup2(fd,STDIN_FILENO)<0) {
+	perror("myShell");
+	exit(1);
+      }
+    }
     if(execvp(commlist->cmd, commlist->argv)<0){
-      printf("ERRO:commando nao existe\n");
+      perror("myShell");
       exit(1);
     }
     
@@ -109,7 +115,7 @@ void execute_commands(COMMAND *commlist) {
     
   }else{
     //codigo do pai
-    
+    wait(NULL);
   }
   
 } 
